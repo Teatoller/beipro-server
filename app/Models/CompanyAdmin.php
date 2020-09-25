@@ -1,0 +1,52 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
+
+class CompanyAdmin extends Model implements Auditable
+{
+    use \OwenIt\Auditing\Auditable;
+    use HasFactory;
+
+    protected $fillable = [
+        'admin_id',
+        'company_id',
+        'front_office_id',
+        'firstname',
+        'lastname',
+        'staff_id',
+        'email',
+        'role',
+        'location',
+    ];
+
+    /**
+     * Get the company that owns the company admin.
+     */
+    public function company()
+    {
+        return $this->belongsTo('App\Company');
+    }
+
+    /**
+     * Get the admin that manages the company admins.
+     */
+    public function admins()
+    {
+        return $this->belongsTo('App\Admin');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function generateTags(): array
+    {
+        return [
+            $this->front_office_id,
+            $this->admin_id,
+        ];
+    }
+}

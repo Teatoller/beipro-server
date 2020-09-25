@@ -1,0 +1,64 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use OwenIt\Auditing\Contracts\Auditable;
+
+class Company extends Model implements Auditable
+{
+    use \OwenIt\Auditing\Auditable;
+    use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'logo',
+        'description',
+        'location',
+        'established',
+        'country',
+    ];
+
+    /**
+     * Get the beipro super admin that manages the company.
+     */
+    public function superAdmins()
+    {
+        return $this->belongsTo('App\SuperAdmin');
+    }
+
+    /**
+     * Get the front offices for the company.
+     */
+    public function frontOffices()
+    {
+        return $this->hasMany('App\FrontOffice');
+    }
+
+    /**
+     * Get the Admins for the company.
+     */
+    public function admins()
+    {
+        return $this->hasMany('App\Admin');
+    }
+
+    /**
+     * Get the company Admins for the company.
+     */
+    public function companyAdmins()
+    {
+        return $this->hasMany('App\CompanyAdmin');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function generateTags(): array
+    {
+        return [
+            $this->name,
+        ];
+    }
+}
