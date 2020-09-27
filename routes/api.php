@@ -36,10 +36,6 @@ use Illuminate\Support\Facades\Route;
 // ]);
 // Route::get('register', [AuthController::class, 'register']);
 
-header('Access-Control-Allow-Origin: https://beipro-frontend.herokuapp.com');
-header('Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE');
-header('Access-Control-Allow-Headers: Content-Type, X-Auth-Token, Origin, Authorization');
-
 Route::group([
     'middleware' => 'api',
     'prefix' => 'password',
