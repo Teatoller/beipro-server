@@ -17,7 +17,7 @@ class Cors
     public function handle(Request $request, Closure $next)
     {
         //header('Access-Control-Allow-Origin:  *');
-        header('Access-Control-Allow-Origin:  http://www.beipro.net/,https://beipro-frontend.herokuapp.com');
+        header('Access-Control-Allow-Origin:  http://www.beipro.net/, https://beipro-frontend.herokuapp.com');
         header('Access-Control-Allow-Headers:  Content-Type, X-Auth-Token, Authorization, Origin');
         header('Access-Control-Allow-Methods:  POST, PUT');
         return $next($request);
