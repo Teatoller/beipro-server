@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
+// use Laravel\Sanctum\HasApiTokens;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -47,6 +48,7 @@ class User extends Authenticatable implements Auditable
         'activation_token',
         'password',
         'remember_token',
+        'two_factor_recovery_codes',
         'two_factor_secret',
     ];
 

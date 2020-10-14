@@ -55,7 +55,7 @@ class DepotPriceController extends Controller
             ->take(1);
 
         $gapconrb = $depotprices
-            ->where('name', 'Gapco Kenya')
+            ->where('name', 'Lexo Energy')
             ->where('location', 'Nairobi')
             ->unique()->sortBy('id', SORT_REGULAR, true)
             ->take(1);
@@ -109,7 +109,7 @@ class DepotPriceController extends Controller
             ->take(1);
 
         $gulfnrb = $depotprices
-            ->where('name', 'Gulf Energy')
+            ->where('name', 'Rubis Energy')
             ->where('location', 'Nairobi')
             ->unique()->sortBy('id', SORT_REGULAR, true)
             ->take(1);
@@ -347,7 +347,7 @@ class DepotPriceController extends Controller
             ->take(1);
 
         $gapcomsa = $depotprices
-            ->where('name', 'Gapco Kenya')
+            ->where('name', 'Lexo Energy')
             ->where('location', 'Mombasa')
             ->unique()->sortBy('id', SORT_REGULAR, true)
             ->take(1);
@@ -407,7 +407,7 @@ class DepotPriceController extends Controller
             ->take(1);
 
         $gulfmsa = $depotprices
-            ->where('name', 'Gulf Energy')
+            ->where('name', 'Rubis Energy')
             ->where('location', 'Mombasa')
             ->unique()->sortBy('id', SORT_REGULAR, true)
             ->take(1);
@@ -639,7 +639,7 @@ class DepotPriceController extends Controller
             ->take(1);
 
         $gapconkr = $depotprices
-            ->where('name', 'Gapco Kenya')
+            ->where('name', 'Lexo Energy')
             ->where('location', 'Nakuru')
             ->unique()->sortBy('id', SORT_REGULAR, true)
             ->take(1);
@@ -699,7 +699,7 @@ class DepotPriceController extends Controller
             ->take(1);
 
         $gulfnkr = $depotprices
-            ->where('name', 'Gulf Energy')
+            ->where('name', 'Rubis Energy')
             ->where('location', 'Nakuru')
             ->unique()->sortBy('id', SORT_REGULAR, true)
             ->take(1);
@@ -931,7 +931,7 @@ class DepotPriceController extends Controller
             ->take(1);
 
         $gapcoksm = $depotprices
-            ->where('name', 'Gapco Kenya')
+            ->where('name', 'Lexo Energy')
             ->where('location', 'Kisumu')
             ->unique()->sortBy('id', SORT_REGULAR, true)
             ->take(1);
@@ -991,7 +991,7 @@ class DepotPriceController extends Controller
             ->take(1);
 
         $gulfksm = $depotprices
-            ->where('name', 'Gulf Energy')
+            ->where('name', 'Rubis Energy')
             ->where('location', 'Kisumu')
             ->unique()->sortBy('id', SORT_REGULAR, true)
             ->take(1);
@@ -1223,7 +1223,7 @@ class DepotPriceController extends Controller
             ->take(1);
 
         $gapcoeld = $depotprices
-            ->where('name', 'Gapco Kenya')
+            ->where('name', 'Lexo Energy')
             ->where('location', 'Eldoret')
             ->unique()->sortBy('id', SORT_REGULAR, true)
             ->take(1);
@@ -1283,7 +1283,7 @@ class DepotPriceController extends Controller
             ->take(1);
 
         $gulfeld = $depotprices
-            ->where('name', 'Gulf Energy')
+            ->where('name', 'Rubis Energy')
             ->where('location', 'Eldoret')
             ->unique()->sortBy('id', SORT_REGULAR, true)
             ->take(1);
