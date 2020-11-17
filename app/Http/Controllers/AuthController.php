@@ -29,7 +29,7 @@ class AuthController extends Controller
         $user = User::create([
             'firstname' => $request->firstname,
             'lastname' => $request->lastname,
-            'email' => $request->email,
+            'email' => strtolower($request->email),
             'password' => bcrypt($request->password),
             'activation_token' => str::random(60),
         ]);
@@ -72,17 +72,16 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-            'remember_me' => 'boolean',
-        ]);
+        $this->validateRequest();
 
-        $loginData = request(['email', 'password']);
-        $loginData['active'] = 1;
-        $loginData['deleted_at'] = null;
+        $email = strtolower($request->email);
+        $password = $request->password;
+        $credentials['email'] = $email;
+        $credentials['password'] = $password;
+        $credentials['active'] = 1;
+        $credentials['deleted_at'] = null;
 
-        if (Auth::attempt($loginData)) {
+        if (Auth::attempt($credentials)) {
             $user = $request->user();
             $tokenResult = $user->createToken('Personal Access Token');
             $token = $tokenResult->token;
@@ -99,7 +98,7 @@ class AuthController extends Controller
                 'message' => 'You have logged in succesfully',
             ]);
         } else {
-            if ($loginData['active'] == !1) {
+            if ($credentials['active'] == !1) {
                 return response()->json([
                     'message' => "Unauthorized, Activate account from  your inbox before continuing.",
                 ], 401);
@@ -212,6 +211,15 @@ class AuthController extends Controller
             'message' => "'Success','You have successfully upload avatar.",
         ], 200);
 
+    }
+
+    public function validateRequest()
+    {
+        return request()->validate([
+            'email' => 'required|string|email',
+            'password' => 'required|string',
+            'remember_me' => 'boolean',
+        ]);
     }
 
 }
