@@ -80,7 +80,10 @@ Route::group([
         Route::post('contact-us', [ContactUsController::class, 'store']);
         Route::get('contact-us/{id}', [ContactUsController::class, 'show']);
         Route::delete('contact-us/{id}', [ContactUsController::class, 'destroy']);
-        
+
         Route::get('mpesa/password', [MpesaController::class, 'lipaNaMpesaPassword']);
+        Route::post('mpesa/access_token', [MpesaController::class, 'generateAccessToken']);
+        Route::post('mpesa/stk/push', [MpesaController::class, 'stkPush']);
+        // Route::post('stk/push/callback_url', [MpesaController::class, 'MpesaApiResponse']);
     });
 });
