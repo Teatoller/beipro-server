@@ -22,5 +22,8 @@ class MpesaTransaction extends Model
         'FirstName',
         'MiddleName',
         'LastName',
+        'email',
+        'response',
+        'user_id',
     ];
 }

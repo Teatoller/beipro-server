@@ -137,9 +137,8 @@ return [
     'consumer_secret' => env('MPESA_CONSUMER_SECRET'),
     'short_Code' => env('MPESA_BUSINESS_SHORT_CODE'),
     'stk_url' => env('MPESA_STK_URL'),
-    'callback_url' => env('CALLBACK_URL'),
+    'callback_url' => env('MPESA_CALLBACK_URL'),
     'saf_access_token_url' => env('MPESA_ACCESS_TOKEN_URL'),
-    'phone' => env('CLIENT_PHONE'),
 
     /*
     |--------------------------------------------------------------------------

@@ -84,6 +84,8 @@ Route::group([
         Route::get('mpesa/password', [MpesaController::class, 'lipaNaMpesaPassword']);
         Route::post('mpesa/access_token', [MpesaController::class, 'generateAccessToken']);
         Route::post('mpesa/stk/push', [MpesaController::class, 'stkPush']);
-        // Route::post('stk/push/callback_url', [MpesaController::class, 'MpesaApiResponse']);
+        Route::post('stk/push/callback/url', [MpesaController::class, 'MpesaApiResponse']);
+        Route::get('client-trxns', [MpesaController::class, 'index']);
+        Route::get('client-dur-trxns', [MpesaController::class, 'durationConfirmation']);
     });
 });

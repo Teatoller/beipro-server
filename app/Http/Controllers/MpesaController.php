@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\MpesaTransaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class MpesaController extends Controller
 {
@@ -58,10 +60,14 @@ class MpesaController extends Controller
      */
     public function stkPush(Request $request)
     {
+        $request->validate([
+            'phoneNumber' => 'required|string|min:10|max:10',
+            'amount' => 'required|numeric|between:0, 9999.99',
+        ]);
 
-        // dd($request);
-        $phone = config('app.phone'); //0722.... Nb: temporarily set in the .env file
-        $formatedPhone = substr($phone, 1); //722....
+        $phone = $request->phoneNumber;
+        $amount = $request->amount;
+        $formatedPhone = substr($phone, 1); //722
         $code = "254";
         $phoneNumber = $code . $formatedPhone; //254722....
 
@@ -74,7 +80,7 @@ class MpesaController extends Controller
             'Password' => $this->lipaNaMpesaPassword(),
             'Timestamp' => Carbon::rawParse('now')->format('YmdHms'),
             'TransactionType' => 'CustomerPayBillOnline',
-            'Amount' => '1',
+            'Amount' => $amount,
             'PartyA' => $phoneNumber,
             'PartyB' => $shortCode,
             'PhoneNumber' => $phoneNumber,
@@ -95,8 +101,123 @@ class MpesaController extends Controller
         if ($curl_response = curl_exec($curl)) {
             return $curl_response;
         } else {
-            return "STK push failed!";
+            return "Stk-push failed!";
         }
+
+    }
+
+    /**
+     * Store a newly created Mpesa response in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function MpesaApiResponse(Request $request)
+    {
+        $response = json_decode($request->getContent());
+        $user = Auth::user();
+
+        $trn = new MpesaTransaction([
+            'TransactionType' => $response->TransactionType,
+            'TransID' => $response->TransID,
+            'TransTime' => $response->TransTime,
+            'TransAmount' => $response->TransAmount,
+            'BusinessShortCode' => $response->BusinessShortCode,
+            'BillRefNumber' => $response->BillRefNumber,
+            'InvoiceNumber' => $response->InvoiceNumber,
+            'OrgAccountBalance' => $response->OrgAccountBalance,
+            'ThirdPartyTransID' => $response->ThirdPartyTransID,
+            'MSISDN' => $response->MSISDN,
+            'FirstName' => $response->FirstName,
+            'MiddleName' => $response->MiddleName,
+            'LastName' => $response->LastName,
+        ]);
+        $trn->user_id = $user->id;
+        $trn->email = $user->email;
+        $trn->response = json_encode($response);
+
+        $trn->save();
+
+        return response()->json([
+            "Success" => "Mpesa transaction has been added",
+        ], 201);
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function durationConfirmation()
+    {
+        if (auth()->check()) {
+            $user = auth()->user();
+            $id = $user->id;
+
+            if (MpesaTransaction::where('user_id', $id)->exists()) {
+                $usertrxns = MpesaTransaction::where('user_id', $id)->get();
+
+                $remainingDurationArr = $usertrxns->map(function ($trxn, $key) {
+                    $transAmount = $trxn['TransAmount'];
+                    // $inputTime = $trxn['TransTime']; //  "20170727104247"
+                    // $date = strtotime($inputTime);
+                    // $transTime = date('Y-m-d H:i:s'); // 2015-12-19 10:10:54
+                    // echo $transTime;
+
+                    $transTime = $trxn['created_at'];
+
+                    $dt = Carbon::now();
+
+                    $dayAmount = 15;
+                    $weekAmount = 65;
+                    $monthAmount = 240;
+                    $newDayAmount = 25;
+                    $newWeekAmount = 100;
+                    $newMonthAmount = 375;
+
+                    $cumTimeRemaining = 0;
+
+                    if (($transAmount == ($dayAmount || $newDayAmount)) && ($transTime <= ($trxn['created_at']->isEndOfDay()))) {
+                        $subscriptionExpires = $trxn['created_at']->isEndOfDay();
+
+                        $timeRemaining = $dt->diffInMinutes($subscriptionExpires);
+                        $cumTimeRemaining += $timeRemaining;
+
+                        return $cumTimeRemaining;
+                    } elseif (($transAmount == ($weekAmount || $newWeekAmount)) && ($transTime <= ($trxn['created_at']->addHours(168)))) {
+                        $subscriptionExpires = $trxn['created_at']->addHours(168);
+
+                        $timeRemaining = $dt->diffInMinutes($subscriptionExpires);
+                        $cumTimeRemaining += $timeRemaining;
+
+                        return $cumTimeRemaining;
+                    } elseif (($transAmount == ($monthAmount || $newMonthAmount)) && ($transTime <= ($trxn['created_at']->addHours(730)))) {
+                        $subscriptionExpires = $trxn['created_at']->addHours(730);
+
+                        $timeRemaining = $dt->diffInMinutes($subscriptionExpires);
+                        $cumTimeRemaining += $timeRemaining;
+
+                        return $cumTimeRemaining;
+                    }
+                });
+
+                $totalTimeRemaining = $remainingDurationArr->sum();
+
+                return response()->json([
+                    'timeRemaining' => $totalTimeRemaining,
+                    "message" => "Subscription valid",
+                    "status" => "valid",
+                ], 200);
+
+            }
+
+            return response()->json([
+                'timeRemaining' => 0,
+                "message" => "The subscription has expired",
+                "status" => "invalid",
+            ], 200);
+        }
+        return "Failed: User details not found";
 
     }
 
@@ -107,7 +228,9 @@ class MpesaController extends Controller
      */
     public function index()
     {
-        //
+        $clientpayments = MpesaTransaction::all();
+        return response($clientpayments, 200);
+
     }
 
     /**
