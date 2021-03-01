@@ -14,6 +14,7 @@ use App\Http\Controllers\DepotPriceController;
 use App\Http\Controllers\FrontOfficeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SuperAdminController;
+use App\Http\Controllers\MpesaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -79,5 +80,12 @@ Route::group([
         Route::post('contact-us', [ContactUsController::class, 'store']);
         Route::get('contact-us/{id}', [ContactUsController::class, 'show']);
         Route::delete('contact-us/{id}', [ContactUsController::class, 'destroy']);
+
+        Route::get('mpesa/password', [MpesaController::class, 'lipaNaMpesaPassword']);
+        Route::post('mpesa/access_token', [MpesaController::class, 'generateAccessToken']);
+        Route::post('mpesa/stk/push', [MpesaController::class, 'stkPush']);
+        Route::post('stk/push/callback/url', [MpesaController::class, 'MpesaApiResponse']);
+        Route::get('client-trxns', [MpesaController::class, 'index']);
+        Route::get('client-dur-trxns', [MpesaController::class, 'durationConfirmation']);
     });
 });
