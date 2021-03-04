@@ -42,4 +42,12 @@ class SuperAdmin extends Model implements Auditable
     {
         return $this->hasMany('App\FrontOffice');
     }
+
+    /**
+     * Get the beipro staff for beipro.
+     */
+    public function beiStaffs()
+    {
+        return $this->hasMany('App\BeiStaff');
+    }
 }

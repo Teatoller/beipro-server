@@ -1,9 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Http\Controllers\Controller;
 
+use App\Http\Controllers\Controller;
 use App\Models\Admin;
+use App\Models\BeiStaff;
 use App\Models\CompanyAdmin;
 use App\Models\SuperAdmin;
 use Illuminate\Support\Facades\Auth;
@@ -23,6 +24,7 @@ class RoleController extends Controller
         $companyAdmin = CompanyAdmin::where('email', $user->email)->exists();
         $admin = Admin::where('email', $user->email)->exists();
         $superAdmin = SuperAdmin::where('email', $user->email)->exists();
+        $beiStaff = BeiStaff::where('email', $user->email)->exists();
 
         if ($companyAdmin) {
             return response("staff", 200);
@@ -30,6 +32,8 @@ class RoleController extends Controller
             return response("admin", 200);
         } elseif ($superAdmin) {
             return response("superadmin", 200);
+        } elseif ($beiStaff) {
+            return response("beistaff", 200);
         } else {
             return "";
         }
