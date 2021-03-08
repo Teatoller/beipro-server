@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminFrontofficeCombineController;
 use App\Http\Controllers\AuditController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BeiStaffController;
 use App\Http\Controllers\CombineCompanyAdminController;
 use App\Http\Controllers\CompanyAdminController;
 use App\Http\Controllers\CompanyController;
@@ -12,9 +12,10 @@ use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\CurrentPriceController;
 use App\Http\Controllers\DepotPriceController;
 use App\Http\Controllers\FrontOfficeController;
+use App\Http\Controllers\MpesaController;
+use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SuperAdminController;
-use App\Http\Controllers\MpesaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -65,6 +66,7 @@ Route::group([
             'companies' => CompanyController::class,
             'companyadmins' => CompanyAdminController::class,
             'admins' => AdminController::class,
+            'beistaffs' => BeiStaffController::class,
             'superadmins' => SuperAdminController::class,
         ]);
         Route::get('depotprices', [DepotPriceController::class, 'index']);
